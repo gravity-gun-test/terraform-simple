@@ -26,11 +26,11 @@ jobs:
 
       - name: Initialize Terraform
         run: terraform init
-        working-directory: ./terraform/dev
+        working-directory: ./environments/dev
 
       - name: Plan Terraform
         run: terraform plan -out=tfplan
-        working-directory: ./terraform/dev
+        working-directory: ./environments/dev
 
       - name: Apply Terraform
         env: 
@@ -54,11 +54,11 @@ jobs:
 
       - name: Initialize Terraform
         run: terraform init
-        working-directory: ./terraform/qa
+        working-directory: ./environments/qa
 
       - name: Plan Terraform
         run: terraform plan -out=tfplan
-        working-directory: ./terraform/qa
+        working-directory: ./environments/qa
 
       - name: Apply Terraform
         env: 
