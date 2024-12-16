@@ -28,6 +28,12 @@ jobs:
         run: terraform init
         working-directory: ./environments/dev
 
+      - name: Debug Secrets
+        run: |
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }}"
+          echo "ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}"
+          echo "ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}"
+
       - name: Plan Terraform
         env:
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
