@@ -2,13 +2,6 @@ name: Terraform Azure Deployment
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   environment:
-    #     description: "Choose environment (dev, qa, prod)"
-    #     required: true
-    #     default: "dev"
-
-
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
