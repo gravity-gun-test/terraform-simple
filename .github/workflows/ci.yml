@@ -1,0 +1,75 @@
+name: Terraform Azure Deployment
+
+on:
+  workflow_dispatch:
+    # inputs:
+    #   environment:
+    #     description: "Choose environment (dev, qa, prod)"
+    #     required: true
+    #     default: "dev"
+
+
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+jobs:
+  terraform-dev:
+    name: Terraform DEV
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: ./terraform/dev
+
+      - name: Plan Terraform
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform/dev
+
+      - name: Apply Terraform
+        env: 
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform/dev
+
+  terraform-qa:
+    name: Terraform QA
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: ./terraform/qa
+
+      - name: Plan Terraform
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform/qa
+
+      - name: Apply Terraform
+        env: 
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID}}      
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform/qa
