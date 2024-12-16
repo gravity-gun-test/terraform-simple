@@ -31,6 +31,7 @@ jobs:
       - name: Plan Terraform
         env:
           TF_LOG: DEBUG
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         run: terraform plan -out=tfplan
         working-directory: ./environments/dev
 
@@ -47,10 +48,10 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
 
@@ -59,11 +60,15 @@ jobs:
         working-directory: ./environments/qa
 
       - name: Plan Terraform
+        env:
+          TF_LOG: DEBUG
+          TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         run: terraform plan -out=tfplan
         working-directory: ./environments/qa
 
       - name: Apply Terraform
         env: 
+          TF_LOG: DEBUG
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           TF_VAR_tenant_id: ${{ secrets.ARM_TENANT_ID}}      
         run: terraform apply -auto-approve tfplan
