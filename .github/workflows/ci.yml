@@ -17,7 +17,7 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -29,6 +29,8 @@ jobs:
         working-directory: ./environments/dev
 
       - name: Plan Terraform
+        env:
+          TF_LOG: DEBUG
         run: terraform plan -out=tfplan
         working-directory: ./environments/dev
 
