@@ -25,22 +25,18 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
 
     steps:
-      # Шаг 1: Клонирование репозитория
-      - name: Checkout code
+       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Шаг 2: Установка Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
 
-      # Шаг 3: Инициализация Terraform
       - name: Initialize Terraform
         run: terraform init
         working-directory: ./environments/${{ github.event.inputs.environment }}
 
-      # Шаг 4: Планирование Terraform
       - name: Plan Terraform
         env:
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
@@ -50,7 +46,6 @@ jobs:
         run: terraform plan -out=tfplan
         working-directory: ./environments/${{ github.event.inputs.environment }}
 
-      # Шаг 5: Применение Terraform
       - name: Apply Terraform
         env:
           TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
